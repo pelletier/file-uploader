@@ -261,6 +261,7 @@ qq.FileUploaderBasic = function(o){
         allowedExtensions: [],               
         sizeLimit: 0,   
         minSizeLimit: 0,                             
+        autoUpload: true,
         // events
         // return false to cancel submit
         onSubmit: function(id, fileName){},
@@ -299,6 +300,9 @@ qq.FileUploaderBasic.prototype = {
     getInProgress: function(){
         return this._filesInProgress;         
     },
+    startUpload: function (){
+        this._onInputChange(this._button._input);
+    },
     _createUploadButton: function(element){
         var self = this;
         
@@ -306,7 +310,7 @@ qq.FileUploaderBasic.prototype = {
             element: element,
             multiple: this._options.multiple && qq.UploadHandlerXhr.isSupported(),
             onChange: function(input){
-                self._onInputChange(input);
+                if (self._options.autoUpload) self._onInputChange(input);
             }        
         });           
     },    

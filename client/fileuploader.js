@@ -262,6 +262,7 @@ qq.FileUploaderBasic = function(o){
         sizeLimit: 0,   
         minSizeLimit: 0,                             
         autoUpload: true,
+        dragDrop: true,
         // events
         // return false to cancel submit
         onSubmit: function(id, fileName){},
@@ -533,7 +534,7 @@ qq.FileUploader = function(o){
     this._button = this._createUploadButton(this._find(this._element, 'button'));        
     
     this._bindCancelEvent();
-    this._setupDragDrop();
+    if (this._options.dragDrop) this._setupDragDrop();
 };
 
 // inherit from Basic Uploader

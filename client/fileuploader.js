@@ -265,6 +265,7 @@ qq.FileUploaderBasic = function(o){
         dragDrop: true,
         // events
         // return false to cancel submit
+        onQueue: function(fileNames){},
         onSubmit: function(id, fileName){},
         onProgress: function(id, fileName, loaded, total){},
         onComplete: function(id, fileName, responseJSON){},
@@ -311,7 +312,19 @@ qq.FileUploaderBasic.prototype = {
             element: element,
             multiple: this._options.multiple && qq.UploadHandlerXhr.isSupported(),
             onChange: function(input){
-                if (self._options.autoUpload) self._onInputChange(input);
+                if (self._options.autoUpload) {
+                    self._onInputChange(input);
+                    return;
+                }
+                if (input.files) {
+                    var filenames = [];
+
+                    for (var i = 0; i < input.files.length; i++) {
+                        filenames.push(self._handler.getName(self._handler.add(input.files[i])));
+                    }
+
+                    self._options.onQueue(filenames);
+                }
             }        
         });           
     },    

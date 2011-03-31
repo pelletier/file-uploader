@@ -312,6 +312,7 @@ qq.FileUploaderBasic.prototype = {
             element: element,
             multiple: this._options.multiple && qq.UploadHandlerXhr.isSupported(),
             onChange: function(input){
+                self._handler.reset();
                 if (self._options.autoUpload) {
                     self._onInputChange(input);
                     return;
@@ -320,10 +321,10 @@ qq.FileUploaderBasic.prototype = {
                     var filenames = [];
 
                     for (var i = 0; i < input.files.length; i++) {
-                        filenames.push(self._handler.getName(self._handler.add(input.files[i])));
+                        filenames.push(input.files[i].name || input.files[i].fileName);
                     }
 
-                    self._options.onQueue(filenames);
+                    self._options.onQueue(filenames, input.files);
                 }
             }        
         });           
@@ -1167,6 +1168,10 @@ qq.extend(qq.UploadHandlerXhr.prototype, {
         }
                 
         return this._files.push(file) - 1;        
+    },
+    reset: function(){
+        this._files.length = 0;
+        return this;
     },
     getName: function(id){        
         var file = this._files[id];
